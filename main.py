@@ -6,19 +6,24 @@ import os
 from datetime import datetime, timedelta
 import math
 
-csv_file_path = '24Rotation3.csv'
+# csv_file_path = '24Rotation2.csv'
 # date_strings = ['03/18/24-05/12/24']
-date_strings = ['05/13/24-07/14/24']
+# csv_file_path = '24Rotation3.csv'
+# date_strings = ['05/13/24-07/14/24']
+csv_file_path = '24Rotation4.csv'
+date_strings = ['07/14/24-9/21/24']
+# csv_file_path = '24Rotation5.csv'
+# date_strings = ['09/23/24-12/01/24']
 date_string = date_strings[-1]
 main_scores_start_col = 3
-main_scores_end_col = 20
+main_scores_end_col = 22
 stats_start_col = 24
 stats_end_col = 38
 leaderboards_start_col = 39
 leaderboards_end_col = 60
 leaderboard_rows = 11
 average_score_start_col = 62
-average_score_end_col = 78
+average_score_end_col = 82
 
 def format_with_commas(value, _):
     return "{:,.0f}".format(value)
@@ -72,7 +77,10 @@ def create_player_graphs(csv_file, row_index, start_col, end_col):
     
     # Use ScalarFormatter to disable scientific notation on the y-axis
     plt.gca().yaxis.set_major_formatter(FuncFormatter(format_with_commas))       
-     
+    
+    # Adjust the x-axis labels: rotate by 45 degrees and reduce font size
+    plt.xticks(rotation=10, fontsize=9)
+    
     # Check if the folder exists, create it if not
     folder_path = os.path.splitext(csv_file)[0]
     subdirectory = "PlayerStats"
@@ -248,12 +256,18 @@ def create_average_scores_graph(csv_file, start_col, end_col):
     # Use ScalarFormatter to disable scientific notation on the y-axis
     plt.gca().yaxis.set_major_formatter(FuncFormatter(format_with_commas))       
      
+    # Adjust the x-axis labels: rotate by 45 degrees and reduce font size
+    plt.xticks(rotation=10, fontsize=9)
+    
     # Check if the folder exists, create it if not
     folder_path = os.path.splitext(csv_file)[0]
     os.makedirs(folder_path, exist_ok=True)
     
+    # Adjust the layout to make space for annotation
+    plt.subplots_adjust(bottom=0.2)  # Increase the bottom margin to 20%
+    
     # Adding annotation at the bottom
-    plt.annotate('*Averages were done over non-zero scores', xy=(1, -0.1), ha='right', va='center', xycoords='axes fraction', fontsize=7, color='black')
+    plt.annotate('*Averages were done over non-zero scores', xy=(1, -0.2), ha='right', va='center', xycoords='axes fraction', fontsize=7, color='black')
 
     # Save the plot as an image
     plt.savefig(f'{folder_path}/average_scores.png')
